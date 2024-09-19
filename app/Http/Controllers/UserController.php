@@ -34,8 +34,8 @@ class UserController extends Controller
         //     'password' => Hash::make('12345'),
         // ];
         
-        // $user = UserModel::firstWhere('level_id', 1);
-        // return view('user', ['data' => $user]);
+        $user = UserModel::firstWhere('level_id', 1);
+        return view('user', ['data' => $user]);
 
         $user = UserModel::findOr(1, ['username', 'nama'], function () {
             abort(404);
