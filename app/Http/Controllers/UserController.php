@@ -52,16 +52,16 @@ class UserController extends Controller
         // dd($user);
         // return view('user', ['data' => $user]);
 
-        $user = UserModel::firstOrNew(
-            [
-            'username' => 'manager33',
-            'nama' => 'Manager Tiga Tiga',
-            'password' => Hash::make('12345'),
-            'level_id' => 2,
-        ]);
-        $user->save();
+        // $user = UserModel::firstOrNew(
+        //     [
+        //     'username' => 'manager33',
+        //     'nama' => 'Manager Tiga Tiga',
+        //     'password' => Hash::make('12345'),
+        //     'level_id' => 2,
+        // ]);
+        // $user->save();
 
-        return view('user', ['data' => $user]);
+        // return view('user', ['data' => $user]);
 
         // $user = UserModel::create([
         //     'username' => 'manager55',
@@ -87,20 +87,20 @@ class UserController extends Controller
         // $user->isClean(); //True
         // dd($user->isDirty());
 
-        // $user = UserModel::create([
-        //     'username' => 'manager11',
-        //     'nama' => 'Managers11',
-        //     'password' => Hash::make('12345'),
-        //     'level_id' => 2,
-        // ]);
-        // $user->username = 'manager12';
+        $user = UserModel::create([
+            'username' => 'manager11',
+            'nama' => 'Managers11',
+            'password' => Hash::make('12345'),
+            'level_id' => 2,
+        ]);
+        $user->username = 'manager12';
 
-        // $user->save();
+        $user->save();
 
-        // $user->wasChanged(); // true
-        // $user->wasChanged('username'); // true
-        // $user->wasChanged(['username', 'level_id']); // true
-        // $user->wasChanged('nama'); // false
-        // dd($user->wasChanged(['nama', 'username'])); //true
+        $user->wasChanged(); // true
+        $user->wasChanged('username'); // true
+        $user->wasChanged(['username', 'level_id']); // true
+        $user->wasChanged('nama'); // false
+        dd($user->wasChanged(['nama', 'username'])); //true
     }
 }
