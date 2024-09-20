@@ -24,8 +24,11 @@ class UserController extends Controller
         // UserModel::where('level_id', '2')->update($data); // Mengupdate data user
         
         // // mencoba mengakses model UserModel
-        // $user = UserModel::all(); // Mengambil semua data dari tabel m_user
+        $user = UserModel::all(); // Mengambil semua data dari tabel m_user
         // return view('user', ['data' => $user]);
+        $user = UserModel::with('level')->get();
+        return view('user', ['data' => $user]);
+    
 
         // $data = [
         //     'level_id' => 2,
