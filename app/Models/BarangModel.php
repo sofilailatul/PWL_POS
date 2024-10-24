@@ -17,4 +17,20 @@ class BarangModel extends Model
     public function kategori(): BelongsTo {
         return $this->belongsTo(KategoriModel::class, 'kategori_id', 'kategori_id');
     }
+
+    public function getHargaBarang($id)
+{
+    $barang = BarangModel::find($id); // Ganti Barang menjadi BarangModel
+    if ($barang) {
+        return response()->json([
+            'status' => true,
+            'harga_jual' => $barang->harga_jual,
+        ]);
+    }
+    return response()->json([
+        'status' => false,
+        'message' => 'Barang tidak ditemukan.',
+    ]);
+}
+
 }
