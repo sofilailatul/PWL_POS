@@ -76,10 +76,10 @@
                 $('#myModal').modal('show');
             });
         }
-
+        var dataPenjualan
         $(document).ready(function() {
             // Inisialisasi DataTables
-            var dataPenjualan = $('#table_penjualan').DataTable({
+            dataPenjualan = $('#table_penjualan').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {

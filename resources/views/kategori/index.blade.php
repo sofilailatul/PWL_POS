@@ -42,7 +42,7 @@
 
         var dataKategori;
         $(document).ready(function() {
-            var dataUser = $('#table_user').DataTable({
+            dataKategori = $('#table_user').DataTable({
                 // serverSide: true, jika ingin menggunakan server side processing
                 processing: true,
                 serverSide: true,

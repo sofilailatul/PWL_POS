@@ -43,7 +43,7 @@
 
         var dataSupplier;
         $(document).ready(function() {
-            var dataUser = $('#table_user').DataTable({
+            dataSupplier = $('#table_user').DataTable({
                 // serverSide: true, jika ingin menggunakan server side processing
                 serverSide: true,
                 ajax: {
