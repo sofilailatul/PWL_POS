@@ -49,6 +49,7 @@
     </form>
     <script>
         $(document).ready(function() {
+            
             $("#form-edit").validate({
                 rules: {
                     kategori_kode: {

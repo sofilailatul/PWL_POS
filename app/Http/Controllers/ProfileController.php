@@ -1,61 +1,61 @@
 <?php
-
 namespace App\Http\Controllers;
-
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use App\Models\UserModel;
-
 class ProfileController extends Controller
 {
     public function index()
     {
+        $user = UserModel::findOrFail(Auth::id());
         $breadcrumb = (object) [
-            'title' => 'Profil',
-            'list' => ['Home', 'Profile']
+            'title' => 'Data Profil',
+            'list' => [
+                ['name' => 'Home', 'url' => url('/')],
+                ['name' => 'Profil', 'url' => url('/profile')]
+            ]
         ];
-
-        $page = (object) [
-            'title' => 'Data Profil Pengguna'
-        ];
-
-        $activeMenu = 'profile'; // Set the active menu
-
-        return view('profile.index', [
+        $activeMenu = 'profile';
+        return view('profile', compact('user'), [
             'breadcrumb' => $breadcrumb,
-            'page' => $page,
-            'activeMenu' => $activeMenu
+            'activeMenu' => $activeMenu,
+            'title' => 'Profil'
         ]);
     }
-
-    public function update_profile(Request $request)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Validasi file gambar
+        request()->validate([
+            'username' => 'required|string|min:3|unique:m_user,username,' . $id . ',user_id',
+            'nama'     => 'required|string|max:100',
+            'old_password' => 'nullable|string',
+            'password' => 'nullable|min:5',
         ]);
-
-        // Mendapatkan ID pengguna yang sedang login
-        $userId = Auth::id();
-
-        // Mengambil pengguna berdasarkan ID menggunakan UserModel
-        $user = UserModel::find($userId);
-
-        // Jika ada file gambar yang diupload
-        if ($request->hasFile('avatar')) {
-            // Hapus foto profil lama jika ada
-            if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
-                Storage::delete('public/' . $user->avatar);
+        $user = UserModel::find($id);
+        $user->username = $request->username;
+        $user->nama = $request->nama;
+        if ($request->filled('old_password')) {
+            if (Hash::check($request->old_password, $user->password)) {
+                $user->update([
+                    'password' => Hash::make($request->password)
+                ]);
+            } else {
+                return back()
+                    ->withErrors(['old_password' => __('Please enter the correct password')])
+                    ->withInput();
             }
-
-            // Simpan foto profil baru
-            $path = $request->file('avatar')->store('gambar', 'public');
-            $user->avatar = $path;
         }
-
-        // Simpan perubahan ke database
+        if (request()->hasFile('profile_image')) {
+            if ($user->profile_image && file_exists(storage_path('app/public/photos/' . $user->profile_image))) {
+                Storage::delete('app/public/photos/' . $user->profile_image);
+            }
+            $file = $request->file('profile_image');
+            $fileName = $file->hashName() . '.' . $file->getClientOriginalExtension();
+            $request->profile_image->move(storage_path('app/public/photos'), $fileName);
+            $user->profile_image = $fileName;
+        }
         $user->save();
-
-        return redirect()->back()->with('success', 'Foto profil berhasil diperbarui');
+        return back()->with('status', 'Profile berhasil diperbarui');
     }
 }

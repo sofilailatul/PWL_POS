@@ -4,10 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Registrasi Pengguna</title>
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- icheck bootstrap -->
@@ -20,7 +20,6 @@
 
 <body class="hold-transition login-page">
     <div class="login-box">
-        <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center"><a href="{{ url('/') }}" class="h1"><b>Admin</b>LTE</a></div>
             <div class="card-body">
@@ -85,13 +84,10 @@
                                 </label>
                             </div>
                         </div>
-                        <!-- /.col -->
                         <div class="col-4">
                             <button type="submit" class="btn btn-primary btn-block">Registrasi</button>
                         </div>
-                        <!-- /.col -->
                     </div>
-                    <!-- Tambahan untuk teks login -->
                     <div class="row mt-2">
                         <div class="col-12 text-center">
                             <p>Sudah punya akun? <a href="{{ url('login') }}">Login</a></p>
@@ -99,22 +95,14 @@
                     </div>
                 </form>
             </div>
-            <!-- /.card-body -->
         </div>
-        <!-- /.card -->
     </div>
-    <!-- /.login-box -->
 
-    <!-- jQuery -->
     <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap 4 -->
     <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- jquery-validation -->
     <script src="{{ asset('adminlte/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/jquery-validation/additional-methods.min.js') }}"></script>
-    <!-- SweetAlert2 -->
     <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-    <!-- AdminLTE App -->
     <script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
 
     <script>
@@ -126,7 +114,7 @@
                     },
                     username: {
                         required: true,
-                        minlength: 4,
+                        minlength: 3,
                         maxlength: 20
                     },
                     password: {
@@ -138,7 +126,7 @@
                     $.ajax({
                         url: form.action,
                         type: form.method,
-                        data: $(form).serialize(),
+                        data: $(form).serialize(), // Sends the form data
                         success: function(response) {
                             if (response.status) {
                                 Swal.fire({
@@ -155,9 +143,18 @@
                                     text: response.message
                                 });
                             }
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle any errors from the server
+                            console.error(xhr.responseText);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Something went wrong! Please try again later.'
+                            });
                         }
                     });
-                    return false;
+                    return false; // Prevent default form submission
                 }
             });
         });

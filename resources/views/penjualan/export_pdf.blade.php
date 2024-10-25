@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -12,6 +13,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            page-break-inside: auto;
         }
 
         td,
@@ -71,6 +73,15 @@
         .border-all td {
             border: 1px solid;
         }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
     </style>
 </head>
 
@@ -78,7 +89,7 @@
     <table class="border-bottom-header">
         <tr>
             <td width="15%" class="text-center">
-                <img class="image" id="image" src="{{ public_path('polinema-bw.png') }}">
+                <img class="image" id="image" src="polinema.png">
             </td>
             <td width="85%">
                 <span class="text-center d-block font-11 font-bold mb-1">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN
@@ -109,20 +120,20 @@
         <tbody>
             @php $no = 1; @endphp
             @foreach ($penjualan as $penj)
-                @foreach ($penj->penjualan_detail as $key => $detail)
-                    <tr>
-                        @if ($key == 0)
-                            <td rowspan="{{ count($penj->penjualan_detail) }}" class="text-center">{{ $no++ }}</td>
-                            <td rowspan="{{ count($penj->penjualan_detail) }}">{{ $penj->penjualan_kode }}</td>
-                            <td rowspan="{{ count($penj->penjualan_detail) }}">{{ $penj->penjualan_tanggal }}</td>
-                            <td rowspan="{{ count($penj->penjualan_detail) }}">{{ $penj->user->nama }}</td>
-                            <td rowspan="{{ count($penj->penjualan_detail) }}">{{ $penj->pembeli }}</td>
-                        @endif
-                        <td>{{ $detail->barang->barang_nama }}</td>
-                        <td>{{ $detail->jumlah }}</td>
-                        <td>{{ $detail->harga }}</td>
-                    </tr>
-                @endforeach
+            @foreach ($penj->penjualan_detail as $key => $detail)
+            <tr>
+                @if ($key == 0)
+                <td rowspan="{{ count($penj->penjualan_detail) }}" class="text-center">{{ $no++ }}</td>
+                <td rowspan="{{ count($penj->penjualan_detail) }}">{{ $penj->penjualan_kode }}</td>
+                <td rowspan="{{ count($penj->penjualan_detail) }}">{{ $penj->penjualan_tanggal }}</td>
+                <td rowspan="{{ count($penj->penjualan_detail) }}">{{ $penj->user->nama }}</td>
+                <td rowspan="{{ count($penj->penjualan_detail) }}">{{ $penj->pembeli }}</td>
+                @endif
+                <td>{{ $detail->barang->barang_nama }}</td>
+                <td>{{ $detail->jumlah }}</td>
+                <td>{{ $detail->harga }}</td>
+            </tr>
+            @endforeach
             @endforeach
         </tbody>
     </table>

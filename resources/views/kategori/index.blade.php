@@ -73,7 +73,7 @@
                 }]
             });
             $('#level_id').on('change',function(){
-                dataUser.ajax.reload();
+                tableUser.ajax.reload();
             })
         });
     </script>

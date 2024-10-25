@@ -69,8 +69,9 @@ class AuthController extends Controller
                 'nama' => 'required|string|max:100',
                 'password' => 'required|min:5'
             ];
-
+    
             $validator = Validator::make($request->all(), $rules);
+            
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
@@ -78,22 +79,29 @@ class AuthController extends Controller
                     'msgField' => $validator->errors(),
                 ]);
             }
-
-            // Hash password sebelum disimpan
+    
+            // Hash password before saving
             $data = $request->all();
             $data['password'] = Hash::make($request->password);
-
-            // Simpan data user
-            usermodel::create($data);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Data user berhasil disimpan',
-                'redirect' => url('login') // Redirect ke halaman login
-            ]);
+    
+            try {
+                // Save user data
+                UserModel::create($data);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data user berhasil disimpan',
+                    'redirect' => url('login') // Redirect to the login page
+                ]);
+            } catch (\Exception $e) {
+                Log::error('User registration failed: ' . $e->getMessage());
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Registration failed, please try again.'
+                ]);
+            }
         }
-
-        // Jika bukan AJAX, arahkan ke halaman login
+        
+        // If not AJAX, redirect to the login page
         return redirect('login')->with('success', 'Registrasi berhasil!');
     }
 }
