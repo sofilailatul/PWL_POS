@@ -10,24 +10,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class PenjualanModel extends Model
 {
     use HasFactory;
-
-    protected $table = 't_penjualan';
-    protected $primaryKey = 'penjualan_id';
+    protected $table = 't_penjualan'; // Mendefinisikan nama tabel
+    protected $primaryKey = 'penjualan_id'; // Mendefinisikan primary key
     protected $fillable = ['user_id', 'pembeli', 'penjualan_kode', 'penjualan_tanggal'];
-
-    public function user(): BelongsTo
-    {
+    
+    public function user(): BelongsTo{
         return $this->belongsTo(UserModel::class, 'user_id', 'user_id');
     }
-
+    public function stok(): HasMany {
+        return $this->hasMany(PenjualanDetailModel::class, 'penjualan_id', 'penjualan_id');
+    }
     public function penjualan_detail(): HasMany
     {
         return $this->hasMany(PenjualanDetailModel::class, 'penjualan_id', 'penjualan_id');
     }
 
-    // Menambahkan relasi ke tabel barang
-    public function barang(): BelongsTo
-    {
-        return $this->belongsTo(BarangModel::class, 'barang_id', 'barang_id');
-    }
 }
